@@ -9,9 +9,9 @@ namespace OnlineFlightSearchAPI.Models
     {
         public string FlightCode { get; set; }
 
-        public string StartDestination { get; set; }
+        public string StartLocation { get; set; }
 
-        public string EndDestination { get; set; }
+        public string EndLocation { get; set; }
 
         public DateTime DepartureDate { get; set; }
 

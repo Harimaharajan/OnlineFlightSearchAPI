@@ -7,6 +7,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using OnlineFlightSearchAPI.FlightServices;
+using Unity;
+using Unity.Lifetime;
 
 namespace OnlineFlightSearchAPI
 {
@@ -15,6 +18,9 @@ namespace OnlineFlightSearchAPI
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+
+            IUnityContainer container = new UnityContainer();
+            container.RegisterType<ISearchFlightService, SearchFlightService>(new ContainerControlledLifetimeManager());
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
