@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace OnlineFlightSearchAPI.FlightServices
 {
-    public class AirportService : IAirportService
+    public class AirportServices : IAirportServices
     {
         private List<AirportDetail> airportDetails = new List<AirportDetail>();
 
-        public AirportService()
+        public AirportServices()
         {
             AirportDetail airportBUD = new AirportDetail("BUD", "Budapest", "Hungary", DateTime.UtcNow.AddHours(1).Kind);
             AirportDetail airportLTN = new AirportDetail("LTN", "London Luton", "UK", DateTime.UtcNow.Kind);
@@ -22,10 +22,13 @@ namespace OnlineFlightSearchAPI.FlightServices
 
         public bool CheckIfAirportIsValid(string airportCode)
         {
-            var result = airportDetails.Where(x => x.AirportCode == airportCode).Count();
-            if (result >= 1)
+            if(!string.IsNullOrEmpty(airportCode))
             {
-                return true;
+                var result = airportDetails.Where(x => x.AirportCode == airportCode).Count();
+                if (result >= 1)
+                {
+                    return true;
+                }
             }
 
             return false;

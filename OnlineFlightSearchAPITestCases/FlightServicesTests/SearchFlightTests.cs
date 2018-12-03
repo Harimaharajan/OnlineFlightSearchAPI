@@ -2,6 +2,7 @@ using AutoFixture;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Unity;
 using Xunit;
@@ -14,7 +15,7 @@ namespace OnlineFlightSearchAPITestCases
         {
             IUnityContainer container = new UnityContainer();
             container.RegisterType<ISearchFlightService, SearchFlightService>();
-            container.RegisterType<IAirportService, AirportService>();
+            container.RegisterType<IAirportServices, AirportServices>();
             return container;
         }
 
@@ -68,6 +69,19 @@ namespace OnlineFlightSearchAPITestCases
             Assert.Equal(expectedException.Message, actualException.Message);
         }
 
+        [Theory]
+        [InlineData("BUD","BUD")]
+        [InlineData("LTN", "LTN")]
+        public void SearchFlight_IfBothStartAndEndLocationAreSame_ReturnsValidationException(string startLocation,string endLocation)
+        {
+            IUnityContainer container = Initialize();
+            SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
+            var expectedException = new ValidationException(ValidationMessages.StartandEndLocationCannotBeSame);
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.Now.AddDays(1)));
+
+            Assert.Equal(expectedException.Message, actualException.Message);
+        }
+
         [Fact]
         public void SearchFlight_IfDepartureDateIsNotValid_ReturnsValidationException()
         {
@@ -82,14 +96,27 @@ namespace OnlineFlightSearchAPITestCases
 
         [Theory]
         [InlineData("BUD", "LTN")]
-        public void SearchFlight_IfStartAndEndDestinationAndDepartureDateValid_ReturnsTrue(string startDestination, string endDestination)
+        public void SearchFlight_IfStartAndEndDestinationAndDepartureDateValid_ReturnsFlightDetails(string startDestination, string endDestination)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
 
-            var actualResult = searchFlightService.SearchFlightDetails(startDestination, endDestination, DateTime.UtcNow.AddDays(1));
+            var actualResult = searchFlightService.SearchFlightDetails(startDestination, endDestination, DateTime.UtcNow.AddDays(2));
 
-            Assert.True(actualResult);
+            Assert.IsType<List<FlightDetail>>(actualResult);
+        }
+
+        [Theory]
+        [InlineData("BUD", "IAD")]
+        public void SearchFlight_IfNoMatchFoundForFlightSearch_ReturnsValidationException(string startLocation,string endLocation)
+        {
+            IUnityContainer container = Initialize();
+            SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
+
+            var expectedException = new ValidationException(ValidationMessages.NoFlightsAvailable);
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
+
+            Assert.Equal(expectedException.Message, actualException.Message);
         }
     }
 }

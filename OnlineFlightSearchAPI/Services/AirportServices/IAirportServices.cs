@@ -1,6 +1,6 @@
 ﻿namespace OnlineFlightSearchAPI.FlightServices
 {
-    public interface IAirportService
+    public interface IAirportServices
     {
         bool CheckIfAirportIsValid(string airportCode);
     }

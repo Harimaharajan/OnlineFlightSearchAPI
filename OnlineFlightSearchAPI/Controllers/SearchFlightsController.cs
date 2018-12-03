@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineFlightSearchAPI.FlightServices;
+using OnlineFlightSearchAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,11 @@ namespace OnlineFlightSearchAPI.Controllers
     public class SearchFlightsController
     {
         [HttpGet]
-        public bool SearchFlightDetails(string startLocation, string endDestination, DateTime departureDate)
+        public List<FlightDetail> SearchFlightDetails(string startLocation, string endDestination, DateTime departureDate)
         {
             IUnityContainer container = new UnityContainer();
             container.RegisterType<ISearchFlightService, SearchFlightService>();
-            container.RegisterType<IAirportService, AirportService>();
+            container.RegisterType<IAirportServices, AirportServices>();
 
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
             return searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);

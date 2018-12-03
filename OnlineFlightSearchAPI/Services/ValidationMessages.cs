@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,5 +13,8 @@ namespace OnlineFlightSearchAPI.FlightServices
         public const string InvalidStartLocation = "Invalid Start Location";
         public const string InvalidDestination = "Invalid Destination";
         public const string InvalidDepartureDate = "Invalid Departure Date";
+
+        public const string NoFlightsAvailable = "No Flights Available";
+        public const string StartandEndLocationCannotBeSame = "Start and End Location cannot be same";
     }
 }
