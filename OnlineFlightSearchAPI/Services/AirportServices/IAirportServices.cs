@@ -1,7 +1,12 @@
-﻿namespace OnlineFlightSearchAPI.FlightServices
+﻿using System.Collections.Generic;
+using OnlineFlightSearchAPI.Models;
+
+namespace OnlineFlightSearchAPI.FlightServices
 {
     public interface IAirportServices
     {
-        bool CheckIfAirportIsValid(string airportCode);
+        List<AirportDetail> airportDetails { get; set; }
+
+        bool IsAirportValid(string airportCode);
     }
 }

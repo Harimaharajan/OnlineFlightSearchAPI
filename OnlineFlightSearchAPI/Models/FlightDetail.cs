@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineFlightSearchAPI.Models
 {
@@ -13,7 +10,7 @@ namespace OnlineFlightSearchAPI.Models
             StartLocation = startLocation;
             Destination = destination;
             DepartureDate = Convert.ToDateTime(departureDate);
-            TravelTime= travelTime;
+            TravelTime = travelTime;
             TicketFare = ticketFare;
             AvailabilityCount = availabilityCount;
         }

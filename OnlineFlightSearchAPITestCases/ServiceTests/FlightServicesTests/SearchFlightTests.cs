@@ -1,4 +1,3 @@
-using AutoFixture;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using System;
@@ -22,7 +21,7 @@ namespace OnlineFlightSearchAPITestCases
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void SearchFlight_IfStartDestinationEmpty_ReturnsValidationException(string startLocation)
+        public void SearchFlight_IfStartDestinationEmpty_ThrowsValidationException(string startLocation)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
@@ -35,7 +34,7 @@ namespace OnlineFlightSearchAPITestCases
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void SearchFlight_IfDestinationNullOrEmpty_ReturnsValidationException(string endLocation)
+        public void SearchFlight_IfDestinationNullOrEmpty_ThrowsValidationException(string endLocation)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
@@ -47,7 +46,7 @@ namespace OnlineFlightSearchAPITestCases
 
         [Theory]
         [InlineData("ABC")]
-        public void SearchFlight_IfStarLocationIsNotValid_ReturnsValidationException(string startLocation)
+        public void SearchFlight_IfStarLocationIsNotValid_ThrowsValidationException(string startLocation)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
@@ -59,7 +58,7 @@ namespace OnlineFlightSearchAPITestCases
 
         [Theory]
         [InlineData("XYZ")]
-        public void SearchFlight_IfDestinationIsNotValid_ReturnsValidationException(string endLocation)
+        public void SearchFlight_IfDestinationIsNotValid_ThrowsValidationException(string endLocation)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
@@ -70,9 +69,9 @@ namespace OnlineFlightSearchAPITestCases
         }
 
         [Theory]
-        [InlineData("BUD","BUD")]
+        [InlineData("BUD", "BUD")]
         [InlineData("LTN", "LTN")]
-        public void SearchFlight_IfBothStartAndEndLocationAreSame_ReturnsValidationException(string startLocation,string endLocation)
+        public void SearchFlight_IfBothStartAndEndLocationAreSame_ThrowsValidationException(string startLocation, string endLocation)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
@@ -83,7 +82,7 @@ namespace OnlineFlightSearchAPITestCases
         }
 
         [Fact]
-        public void SearchFlight_IfDepartureDateIsNotValid_ReturnsValidationException()
+        public void SearchFlight_IfDepartureDateIsNotValid_ThrowsValidationException()
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
@@ -101,14 +100,14 @@ namespace OnlineFlightSearchAPITestCases
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();
 
-            var actualResult = searchFlightService.SearchFlightDetails(startDestination, endDestination, DateTime.UtcNow.AddDays(2));
+            var actualResult = searchFlightService.SearchFlightDetails(startDestination, endDestination, DateTime.UtcNow.AddDays(1));
 
             Assert.IsType<List<FlightDetail>>(actualResult);
         }
 
         [Theory]
         [InlineData("BUD", "IAD")]
-        public void SearchFlight_IfNoMatchFoundForFlightSearch_ReturnsValidationException(string startLocation,string endLocation)
+        public void SearchFlight_IfNoMatchFoundForFlightSearch_ThrowsValidationException(string startLocation, string endLocation)
         {
             IUnityContainer container = Initialize();
             SearchFlightService searchFlightService = container.Resolve<SearchFlightService>();

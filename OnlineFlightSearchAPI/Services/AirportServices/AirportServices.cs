@@ -2,13 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineFlightSearchAPI.FlightServices
 {
     public class AirportServices : IAirportServices
     {
-        private List<AirportDetail> airportDetails = new List<AirportDetail>();
+        public List<AirportDetail> airportDetails { get; set; } = new List<AirportDetail>();
 
         public AirportServices()
         {
@@ -20,12 +19,12 @@ namespace OnlineFlightSearchAPI.FlightServices
             airportDetails.Add(airportIAD);
         }
 
-        public bool CheckIfAirportIsValid(string airportCode)
+        public bool IsAirportValid(string airportCode)
         {
-            if(!string.IsNullOrEmpty(airportCode))
+            if (!string.IsNullOrEmpty(airportCode))
             {
-                var result = airportDetails.Where(x => x.AirportCode == airportCode).Count();
-                if (result >= 1)
+                var result = airportDetails.Where(x => x.AirportCode == airportCode).Any();
+                if (result)
                 {
                     return true;
                 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineFlightSearchAPI.Models
 {
@@ -12,7 +9,7 @@ namespace OnlineFlightSearchAPI.Models
             AirportCode = airportCode;
             City = city;
             Country = country;
-            TimeZone = timeZone;
+            AirportTimeZone = timeZone;
         }
 
         public string AirportCode { get; set; }
@@ -21,6 +18,6 @@ namespace OnlineFlightSearchAPI.Models
 
         public string Country { get; set; }
 
-        public DateTimeKind TimeZone { get; set; }
+        public DateTimeKind AirportTimeZone { get; set; }
     }
 }
