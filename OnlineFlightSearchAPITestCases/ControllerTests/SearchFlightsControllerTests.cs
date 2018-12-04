@@ -1,9 +1,8 @@
-﻿using OnlineFlightSearchAPI.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineFlightSearchAPI.Controllers;
 using OnlineFlightSearchAPI.FlightServices;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Net;
 using Unity;
 using Xunit;
 
@@ -21,29 +20,25 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void SearchFlight_IfStartDestinationEmpty_ThrowsValidationException(string startLocation)
+        [InlineData("BUD", "LTN")]
+        public void SearchFlight_IfAllSearchParametersAreValid_ReturnsStatusCodeOK200(string startLocation, string endLocation)
         {
             IUnityContainer container = Initialize();
             var searchFlightController = container.Resolve<SearchFlightsController>();
-            var expectedException = new ValidationException(ValidationMessages.StartLocationCannotBeEmpty);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightController.SearchFlightDetails(startLocation, "BUD", DateTime.Now.AddDays(1)));
+            var actualResult = searchFlightController.SearchFlight(startLocation, endLocation, DateTime.Now.AddDays(1)) as OkObjectResult;
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal((int)HttpStatusCode.OK, actualResult.StatusCode);
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void SearchFlight_IfDestinationNullOrEmpty_ThrowsValidationException(string endLocation)
+        [InlineData("BUD", "LTN")]
+        public void SearchFlight_IfDestinationNullOrEmpty_ThrowsValidationException(string startLocation, string endLocation)
         {
             IUnityContainer container = Initialize();
             var searchFlightController = container.Resolve<SearchFlightsController>();
-            var expectedException = new ValidationException(ValidationMessages.DestinationCannotBeEmpty);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightController.SearchFlightDetails("BUD", endLocation, DateTime.Now.AddDays(1)));
+            var result = searchFlightController.SearchFlight(startLocation, null, DateTime.Now.AddDays(1)) as OkObjectResult;
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal((int)HttpStatusCode.BadRequest, result.StatusCode);
         }
     }
 }
