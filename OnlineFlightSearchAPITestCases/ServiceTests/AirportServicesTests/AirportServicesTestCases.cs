@@ -1,28 +1,29 @@
-﻿using OnlineFlightSearchAPI.FlightServices;
-using Unity;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OnlineFlightSearchAPI.FlightServices;
+using OnlineFlightSearchAPI.Repositories;
 using Xunit;
 
 namespace OnlineFlightSearchAPITestCases
 {
     public class AirportServicesTestCases
     {
+        private readonly IAirportServices airportServices;
 
-        private IUnityContainer Initialize()
+        public AirportServicesTestCases()
         {
-            IUnityContainer container = new UnityContainer();
-            container.RegisterType<IAirportServices, AirportServices>();
-            return container;
-        }
+            var services = new ServiceCollection();
+            services.AddScoped<IAirportServices, AirportServices>();
+            services.AddScoped<IAirportRepository, AirportRepository>();
+            var serviceProvider = services.BuildServiceProvider();
 
+            airportServices = serviceProvider.GetService<IAirportServices>();
+        }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
         public void IsAirportValid_IfAirportCodeIsNullOrEmpty_ReturnsFalse(string airportCode)
         {
-            IUnityContainer container = Initialize();
-            AirportServices airportServices = container.Resolve<AirportServices>();
-
             var result = airportServices.IsAirportValid(airportCode);
 
             Assert.False(result);
@@ -33,9 +34,6 @@ namespace OnlineFlightSearchAPITestCases
         [InlineData("IAD")]
         public void IsAirportValid_IfAirportCodeIsValid_ReturnsTrue(string airportCode)
         {
-            IUnityContainer container = Initialize();
-            AirportServices airportServices = container.Resolve<AirportServices>();
-
             var result = airportServices.IsAirportValid(airportCode);
 
             Assert.True(result);
@@ -45,13 +43,9 @@ namespace OnlineFlightSearchAPITestCases
         [InlineData("XYZ")]
         public void IsAirportValid_IfAirportCodeIsNotValid_ReturnsFalse(string airportCode)
         {
-            IUnityContainer container = Initialize();
-            AirportServices airportServices = container.Resolve<AirportServices>();
-
             var result = airportServices.IsAirportValid(airportCode);
 
             Assert.False(result);
         }
-
     }
 }
