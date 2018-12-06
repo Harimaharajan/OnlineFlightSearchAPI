@@ -17,16 +17,16 @@ namespace OnlineFlightSearchAPI.Repositories.FlightRepository
         {
             _airportService = airportService;
 
-            FlightDetail flight1 = new FlightDetail("CM 2001", "BUD", "LTN", "2018-12-06 10:00", "2:35", 80, 20);
-            FlightDetail flight2 = new FlightDetail("CM 2002", "BUD", "LTN", "2018-12-06 17:00", "10:00", 100, 19);
-            FlightDetail flight3 = new FlightDetail("CM 2003", "BUD", "LTN", "2018-12-06 18:00", "3:35", 80, 10);
-            FlightDetail flight4 = new FlightDetail("CM 2004", "LTN", "IAD", "2018-12-06 06:00", "2:05", 200, 2);
-            FlightDetail flight5 = new FlightDetail("CM 2005", "LTN", "BUD", "2018-12-06 05:00", "2:00", 75, 60);
-            FlightDetail flight6 = new FlightDetail("CM 2006", "LTN", "IAD", "2018-12-06 08:00", "12:35", 45, 20);
-            FlightDetail flight7 = new FlightDetail("CM 2007", "IAD", "LTN", "2018-12-06 13:00", "12:30", 40, 33);
-            FlightDetail flight8 = new FlightDetail("CM 2008", "LTN", "BUD", "2018-12-06 09:00", "2:05", 78, 0);
-            FlightDetail flight9 = new FlightDetail("CM 2009", "BUD", "LTN", "2018-12-06 10:00", "2:00", 90, 0);
-            FlightDetail flight10 = new FlightDetail("CM 2010", "IAD", "LTN", "2018-12-06 2:00", "14:35", 190, 1);
+            FlightDetail flight1 = new FlightDetail("CM 2001", "BUD", "LTN", "2018-12-07 10:00", "2:35", 80, 20);
+            FlightDetail flight2 = new FlightDetail("CM 2002", "BUD", "LTN", "2018-12-07 17:00", "10:00", 100, 19);
+            FlightDetail flight3 = new FlightDetail("CM 2003", "BUD", "LTN", "2018-12-07 18:00", "3:35", 80, 10);
+            FlightDetail flight4 = new FlightDetail("CM 2004", "LTN", "IAD", "2018-12-08 06:00", "2:05", 200, 2);
+            FlightDetail flight5 = new FlightDetail("CM 2005", "LTN", "BUD", "2018-12-08 05:00", "2:00", 75, 60);
+            FlightDetail flight6 = new FlightDetail("CM 2006", "LTN", "IAD", "2018-12-08 08:00", "12:35", 45, 20);
+            FlightDetail flight7 = new FlightDetail("CM 2007", "IAD", "LTN", "2018-12-09 13:00", "12:30", 40, 33);
+            FlightDetail flight8 = new FlightDetail("CM 2008", "LTN", "BUD", "2018-12-09 09:00", "2:05", 78, 0);
+            FlightDetail flight9 = new FlightDetail("CM 2009", "BUD", "LTN", "2018-12-09 10:00", "2:00", 90, 0);
+            FlightDetail flight10 = new FlightDetail("CM 2010", "IAD", "LTN", "2018-12-09 2:00", "14:35", 190, 1);
 
             flightDetails.Add(flight1);
             flightDetails.Add(flight2);

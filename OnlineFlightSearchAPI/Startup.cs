@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineFlightSearchAPI.FlightServices;
+using OnlineFlightSearchAPI.Repositories;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
 
 namespace OnlineFlightSearchAPI
@@ -24,6 +25,7 @@ namespace OnlineFlightSearchAPI
             services.AddScoped<ISearchFlightService, FlightService>();
             services.AddScoped<IAirportServices, AirportServices>();
             services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<IAirportRepository, AirportRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

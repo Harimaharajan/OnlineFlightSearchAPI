@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using OnlineFlightSearchAPI.Models;
-
-namespace OnlineFlightSearchAPI.FlightServices
+﻿namespace OnlineFlightSearchAPI.FlightServices
 {
     public interface IAirportServices
     {

@@ -1,48 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using OnlineFlightSearchAPI.Controllers;
-using OnlineFlightSearchAPI.FlightServices;
-using OnlineFlightSearchAPI.Repositories;
-using OnlineFlightSearchAPI.Repositories.FlightRepository;
-using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using OnlineFlightSearchAPI;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OnlineFlightSearchAPITestCases.ControllerTests
 {
-    public class SearchFlightsControllerTests
+    public class SearchFlightsControllerTests : IClassFixture<WebApplicationFactory<OnlineFlightSearchAPI.Startup>>
     {
-        private readonly SearchFlightsController searchFlightsController;
+        private readonly TestServer server;
 
         public SearchFlightsControllerTests()
         {
-            var services = new ServiceCollection();
-            services.AddScoped<SearchFlightsController>();
-            services.AddScoped<ISearchFlightService, FlightService>();
-            services.AddScoped<IAirportServices, AirportServices>();
-            services.AddScoped<IFlightRepository, FlightRepository>();
-            services.AddScoped<IAirportRepository, AirportRepository>();
-            var serviceProvider = services.BuildServiceProvider();
-
-            searchFlightsController = serviceProvider.GetService<SearchFlightsController>();
+            server = new TestServer(new WebHostBuilder()
+                .UseStartup<Startup>());
         }
 
         [Theory]
-        [InlineData("BUD", "LTN")]
-        public void SearchFlight_IfAllSearchParametersAreValid_ReturnsStatusCodeOK200(string startLocation, string endLocation)
+        [InlineData("/api/SearchFlights/SearchFlightDetails?startLocation=BUD&endDestination=LTN&departureDate=2018-12-07")]
+        public async Task SearchController_ValidRequest_ReturnsHttpStatusOK200(string url)
         {
-            var actualResult = searchFlightsController.SearchFlight(startLocation, endLocation, DateTime.Now.AddDays(1)) as OkObjectResult;
+            var client = server.CreateClient();
 
-            Assert.Equal((int)HttpStatusCode.OK, actualResult.StatusCode);
+            var response = await client.GetAsync(url);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Theory]
-        [InlineData("BUD", "LTN")]
-        public void SearchFlight_IfDestinationNullOrEmpty_ThrowsValidationException(string startLocation, string endLocation)
+        [InlineData("/api/SearchFlights/Search?startLocation=BUD&endDestination=LTN&departureDate=2018-12-06")]
+        public async Task SearchController_InValidActionRequest_ReturnsHttpStatusNotFound404(string url)
         {
-            var result = searchFlightsController.SearchFlight(startLocation, null, DateTime.Now.AddDays(1)) as OkObjectResult;
+            var client = server.CreateClient();
 
-            Assert.Equal((int)HttpStatusCode.BadRequest, result.StatusCode);
+            var response = await client.GetAsync(url);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("/api/SearchFlights/SearchFlightDetails?startLocation=BUD&endDestination=XYZ&departureDate=2018-12-07")]
+        public async Task SearchController_InValidSearchParameterRequest_ThrowsValidationException(string url)
+        {
+            var client = server.CreateClient();
+
+            var response = await Assert.ThrowsAsync<ValidationException>(() => client.GetAsync(url));
+
+            Assert.IsType<ValidationException>(response);
         }
     }
 }

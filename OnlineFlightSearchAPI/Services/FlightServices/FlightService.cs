@@ -55,7 +55,7 @@ namespace OnlineFlightSearchAPI.FlightServices
 
         private bool ValidateDepartureDate(DateTime departureDate)
         {
-            if (DateTime.UtcNow > departureDate)
+            if (DateTime.UtcNow.Date > departureDate.Date)
             {
                 throw new ValidationException(ValidationMessages.InvalidDepartureDate);
             }

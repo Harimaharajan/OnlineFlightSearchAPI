@@ -3,7 +3,7 @@ using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineFlightSearchAPI.Controllers
 {
@@ -21,19 +21,15 @@ namespace OnlineFlightSearchAPI.Controllers
         [HttpGet]
         public ActionResult<List<FlightDetail>> SearchFlightDetails(string startLocation, string endDestination, DateTime departureDate)
         {
-            List<FlightDetail> flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);
-            return flightDetails;
-        }
-
-        public ObjectResult SearchFlight(string startLocation, string endDestination, DateTime departureDate)
-        {
-            List<FlightDetail> flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);
-
-            if (flightDetails != null)
+            try
             {
-                return Ok(HttpStatusCode.OK);
+                List<FlightDetail> flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);
+                return flightDetails;
             }
-            return Ok(HttpStatusCode.BadRequest);
+            catch (ValidationException ex)
+            {
+                throw ex;
+            }
         }
     }
 }
