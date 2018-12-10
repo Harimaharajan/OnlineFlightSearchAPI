@@ -22,10 +22,10 @@ namespace OnlineFlightSearchAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddScoped<ISearchFlightService, FlightService>();
-            services.AddScoped<IAirportServices, AirportServices>();
-            services.AddScoped<IFlightRepository, FlightRepository>();
-            services.AddScoped<IAirportRepository, AirportRepository>();
+            services.AddTransient<ISearchFlightService, FlightService>();
+            services.AddTransient<IAirportServices, AirportServices>();
+            services.AddTransient<IFlightRepository, FlightRepository>();
+            services.AddTransient<IAirportRepository, AirportRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using OnlineFlightSearchAPI.Models;
+﻿using OnlineFlightSearchAPI.Models;
+using System.Collections.Generic;
 
 namespace OnlineFlightSearchAPI.Repositories
 {

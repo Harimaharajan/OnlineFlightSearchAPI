@@ -20,10 +20,11 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         }
 
         [Theory]
-        [InlineData("/api/SearchFlights/SearchFlightDetails?startLocation=BUD&endDestination=LTN&departureDate=2018-12-07")]
-        public async Task SearchController_ValidRequest_ReturnsHttpStatusOK200(string url)
+        [InlineData("BUD", "LTN", "2018-12-12")]
+        public async Task SearchController_ValidRequest_ReturnsHttpStatusOK200(string startLocation, string destination, string departureDate)
         {
             var client = server.CreateClient();
+            var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={departureDate}";
 
             var response = await client.GetAsync(url);
 
@@ -31,10 +32,11 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         }
 
         [Theory]
-        [InlineData("/api/SearchFlights/Search?startLocation=BUD&endDestination=LTN&departureDate=2018-12-06")]
-        public async Task SearchController_InValidActionRequest_ReturnsHttpStatusNotFound404(string url)
+        [InlineData("BUD", "LTN", "2018-12-12")]
+        public async Task SearchController_InvalidAPIRequest_ReturnsHttpStatusNotFound404(string startLocation, string destination, string departureDate)
         {
             var client = server.CreateClient();
+            var url = $"/api/SearchFlights/Search?startLocation={startLocation}&endDestination={destination}&departureDate={departureDate}";
 
             var response = await client.GetAsync(url);
 
@@ -42,10 +44,11 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         }
 
         [Theory]
-        [InlineData("/api/SearchFlights/SearchFlightDetails?startLocation=BUD&endDestination=XYZ&departureDate=2018-12-07")]
-        public async Task SearchController_InValidSearchParameterRequest_ThrowsValidationException(string url)
+        [InlineData("BUD", "", "2018-12-12")]
+        public async Task SearchController_InValidSearchParameterRequest_ThrowsValidationException(string startLocation, string destination, string departureDate)
         {
             var client = server.CreateClient();
+            var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={departureDate}";
 
             var response = await Assert.ThrowsAsync<ValidationException>(() => client.GetAsync(url));
 

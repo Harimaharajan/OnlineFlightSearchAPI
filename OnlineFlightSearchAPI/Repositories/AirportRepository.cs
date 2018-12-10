@@ -1,5 +1,4 @@
 ﻿using OnlineFlightSearchAPI.Models;
-using System;
 using System.Collections.Generic;
 
 namespace OnlineFlightSearchAPI.Repositories
@@ -10,12 +9,7 @@ namespace OnlineFlightSearchAPI.Repositories
 
         public AirportRepository()
         {
-            AirportDetail airportBUD = new AirportDetail("BUD", "Budapest", "Hungary", DateTime.UtcNow.AddHours(1).Kind);
-            AirportDetail airportLTN = new AirportDetail("LTN", "London Luton", "UK", DateTime.UtcNow.Kind);
-            AirportDetail airportIAD = new AirportDetail("IAD", "Washington", "USA", DateTime.UtcNow.AddHours(-5).Kind);
-            airportDetails.Add(airportBUD);
-            airportDetails.Add(airportLTN);
-            airportDetails.Add(airportIAD);
+
         }
     }
 }
