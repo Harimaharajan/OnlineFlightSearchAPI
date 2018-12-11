@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using OnlineFlightSearchAPI;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Moq;
+using OnlineFlightSearchAPI;
+using OnlineFlightSearchAPI.Controllers;
+using OnlineFlightSearchAPI.FlightServices;
+using OnlineFlightSearchAPI.Models;
 using Xunit;
 
 namespace OnlineFlightSearchAPITestCases.ControllerTests
@@ -21,7 +27,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
 
         [Theory]
         [InlineData("BUD", "LTN", "2018-12-12")]
-        public async Task SearchController_ValidRequest_ReturnsHttpStatusOK200(string startLocation, string destination, string departureDate)
+        public async Task SearchFlightDetails_ValidRequest_ReturnsHttpStatusOK200(string startLocation, string destination, string departureDate)
         {
             var client = server.CreateClient();
             var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={departureDate}";
@@ -33,7 +39,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
 
         [Theory]
         [InlineData("BUD", "LTN", "2018-12-12")]
-        public async Task SearchController_InvalidAPIRequest_ReturnsHttpStatusNotFound404(string startLocation, string destination, string departureDate)
+        public async Task SearchFlightDetails_InvalidAPIRequest_ReturnsHttpStatusNotFound404(string startLocation, string destination, string departureDate)
         {
             var client = server.CreateClient();
             var url = $"/api/SearchFlights/Search?startLocation={startLocation}&endDestination={destination}&departureDate={departureDate}";
@@ -45,7 +51,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
 
         [Theory]
         [InlineData("BUD", "", "2018-12-12")]
-        public async Task SearchController_InValidSearchParameterRequest_ThrowsValidationException(string startLocation, string destination, string departureDate)
+        public async Task SearchFlightDetails_InValidSearchParameterRequest_ThrowsValidationException(string startLocation, string destination, string departureDate)
         {
             var client = server.CreateClient();
             var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={departureDate}";

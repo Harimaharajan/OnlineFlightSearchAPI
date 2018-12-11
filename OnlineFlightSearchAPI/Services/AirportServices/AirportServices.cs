@@ -1,5 +1,5 @@
-﻿using OnlineFlightSearchAPI.Repositories;
-using System.Linq;
+﻿using System.Linq;
+using OnlineFlightSearchAPI.Repositories;
 
 namespace OnlineFlightSearchAPI.FlightServices
 {
@@ -16,7 +16,7 @@ namespace OnlineFlightSearchAPI.FlightServices
         {
             if (!string.IsNullOrEmpty(airportCode))
             {
-                var result = _airportRepository.airportDetails.Where(x => x.AirportCode == airportCode).Any();
+                    var result = _airportRepository.airportDetails.Where(x => x.AirportCode == airportCode).Any();
                 if (result)
                 {
                     return true;
