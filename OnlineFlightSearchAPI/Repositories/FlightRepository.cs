@@ -9,11 +9,11 @@ namespace OnlineFlightSearchAPI.Repositories.FlightRepository
 {
     public class FlightRepository : IFlightRepository
     {
-        public List<FlightDetail> flightDetails { get; set; } = new List<FlightDetail>();
+        public List<FlightDetail> FlightDetails { get; set; } = new List<FlightDetail>();
 
         public List<FlightDetail> FetchFlightDetails(string startLocation, string endLocation, DateTime departureDate)
         {
-            var searchResult = flightDetails.Where(x => (x.StartLocation == startLocation) &&
+            var searchResult = FlightDetails.Where(x => (x.StartLocation == startLocation) &&
                                                         (x.Destination == endLocation) &&
                                                         (x.DepartureDate.Date == departureDate.Date))
                                                         .ToList();

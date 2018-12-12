@@ -5,6 +5,6 @@ namespace OnlineFlightSearchAPI.Repositories
 {
     public class AirportRepository : IAirportRepository
     {
-        public List<AirportDetail> airportDetails { get; set; } = new List<AirportDetail>();
+        public List<AirportDetail> AirportDetails { get; set; } = new List<AirportDetail>();
     }
 }

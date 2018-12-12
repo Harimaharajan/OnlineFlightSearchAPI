@@ -12,11 +12,11 @@ namespace OnlineFlightSearchAPI.FlightServices
             _airportRepository = airportRepository;
         }
 
-        public bool IsAirportValid(string airportCode)
+        public virtual bool IsAirportValid(string airportCode)
         {
             if (!string.IsNullOrEmpty(airportCode))
             {
-                    var result = _airportRepository.airportDetails.Where(x => x.AirportCode == airportCode).Any();
+                var result = _airportRepository.AirportDetails.Where(x => x.AirportCode == airportCode).Any();
                 if (result)
                 {
                     return true;

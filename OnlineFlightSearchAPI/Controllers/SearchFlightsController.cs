@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OnlineFlightSearchAPI.FlightServices;
-using OnlineFlightSearchAPI.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using OnlineFlightSearchAPI.FlightServices;
 
 namespace OnlineFlightSearchAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[action]")]
     [ApiController]
     public class SearchFlightsController : ControllerBase
     {
@@ -19,16 +18,31 @@ namespace OnlineFlightSearchAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<FlightDetail>> SearchFlightDetails(string startLocation, string endDestination, DateTime departureDate)
+        public async Task<IActionResult> SearchFlightDetails(string startLocation, string endDestination, string departureDate)
         {
             try
             {
-                List<FlightDetail> flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);
-                return flightDetails;
+                var flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, Convert.ToDateTime(departureDate));
+
+                if (flightDetails == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(flightDetails);
             }
             catch (ValidationException ex)
             {
-                throw ex;
+                if (ex.Message == ValidationMessages.StartLocationCannotBeEmpty ||
+                    ex.Message == ValidationMessages.DestinationCannotBeEmpty)
+                {
+                    return BadRequest(ex.Message);
+                }
+                return NoContent();
+            }
+            catch (FormatException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }
