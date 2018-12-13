@@ -12,7 +12,7 @@ namespace OnlineFlightSearchAPI.FlightServices
             _airportRepository = airportRepository;
         }
 
-        public virtual bool IsAirportValid(string airportCode)
+        public bool IsAirportValid(string airportCode)
         {
             if (!string.IsNullOrEmpty(airportCode))
             {

@@ -5,6 +5,6 @@ namespace OnlineFlightSearchAPI.Repositories
 {
     public interface IAirportRepository
     {
-        List<AirportDetail> AirportDetails { get; set; }
+        List<AirportDetail> AirportDetails { get; }
     }
 }
