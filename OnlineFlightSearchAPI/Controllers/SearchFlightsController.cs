@@ -6,7 +6,7 @@ using OnlineFlightSearchAPI.FlightServices;
 
 namespace OnlineFlightSearchAPI.Controllers
 {
-    [Route("api/[action]")]
+    [Route("api/Flight/[action]")]
     [ApiController]
     public class SearchFlightsController : ControllerBase
     {
@@ -18,7 +18,8 @@ namespace OnlineFlightSearchAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SearchFlightDetails(string startLocation, string endDestination, string departureDate)
+        [ActionName("Search")]
+        public IActionResult SearchFlightDetails([FromQuery]string startLocation, [FromQuery]string endDestination, [FromQuery]string departureDate)
         {
             try
             {
@@ -26,23 +27,23 @@ namespace OnlineFlightSearchAPI.Controllers
 
                 if (flightDetails == null)
                 {
-                    return NotFound();
+                    return NoContent();
                 }
 
                 return Ok(flightDetails);
             }
-            catch (ValidationException ex)
+            catch (ValidationException validationException)
             {
-                if (ex.Message == ValidationMessages.StartLocationCannotBeEmpty ||
-                    ex.Message == ValidationMessages.DestinationCannotBeEmpty)
+                if (validationException.Message == ValidationMessages.NoFlightsAvailable)
                 {
-                    return BadRequest(ex.Message);
+                    return NoContent();
                 }
-                return NoContent();
+
+                return BadRequest(validationException.Message);
             }
-            catch (FormatException ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(exception.Message);
             }
         }
     }

@@ -10,25 +10,13 @@ namespace OnlineFlightSearchAPITestCases
 {
     public class AirportServicesTests
     {
-        private List<AirportDetail> GetAirportDetails()
-        {
-            List<AirportDetail> airportDetails = new List<AirportDetail>
-            {
-                new AirportDetail("BUD", "Budapest", "Hungary", DateTime.UtcNow.AddHours(1).Kind),
-                new AirportDetail("LTN", "London Luton", "UK", DateTime.UtcNow.Kind),
-                new AirportDetail("IAD", "Washington", "USA", DateTime.UtcNow.AddHours(-5).Kind)
-            };
-
-            return airportDetails;
-        }
-
         [Theory]
         [InlineData("")]
         [InlineData(null)]
         public void IsAirportValid_IfAirportCodeIsNullOrEmpty_ReturnsFalse(string airportCode)
         {
             var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.AirportDetails).Returns(GetAirportDetails());
+            mockAirportRepository.Setup(x => x.IsAirportValid(airportCode)).Returns(false);
             var airportService = new AirportServices(mockAirportRepository.Object);
 
             var result = airportService.IsAirportValid(airportCode);
@@ -42,7 +30,7 @@ namespace OnlineFlightSearchAPITestCases
         public void IsAirportValid_IfAirportCodeIsValid_ReturnsTrue(string airportCode)
         {
             var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.AirportDetails).Returns(GetAirportDetails());
+            mockAirportRepository.Setup(x => x.IsAirportValid(airportCode)).Returns(true);
             var airportService = new AirportServices(mockAirportRepository.Object);
 
             var actual = airportService.IsAirportValid(airportCode);
@@ -55,7 +43,7 @@ namespace OnlineFlightSearchAPITestCases
         public void IsAirportValid_IfAirportCodeIsNotValid_ReturnsFalse(string airportCode)
         {
             var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.AirportDetails).Returns(GetAirportDetails());
+            mockAirportRepository.Setup(x => x.IsAirportValid(airportCode)).Returns(false);
             var airportService = new AirportServices(mockAirportRepository.Object);
 
             var result = airportService.IsAirportValid(airportCode);

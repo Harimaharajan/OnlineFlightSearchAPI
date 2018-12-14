@@ -6,8 +6,6 @@ namespace OnlineFlightSearchAPI.Repositories.FlightRepository
 {
     public interface IFlightRepository
     {
-        List<FlightDetail> FlightDetails { get; }
-
         List<FlightDetail> FetchFlightDetails(string startLocation, string endLocation, DateTime departureDate);
     }
 }
