@@ -26,10 +26,10 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         public async Task SearchFlightDetails_ValidRequest_ReturnsHttpStatusBadRequest400(string startLocation, string destination)
         {
             var client = server.CreateClient();
-            var request = TestConstants.ValidFlightSearchRequest + 
-                                        "?startLocation=" + startLocation +
-                                        "&endDestination=" + destination + 
-                                        "&departureDate=" + DateTime.UtcNow.Date.AddDays(1);
+            var request = TestConstants.ValidFlightSearchRequest +
+                                        "?" + TestConstants.StartLocation + "=" + startLocation +
+                                        "&" + TestConstants.EndLocation + "=" + destination +
+                                        "&" + TestConstants.DepartureDate + "=" + DateTime.UtcNow.Date.AddDays(1);
             var response = await client.GetAsync(request);
 
             // Retained this so that once data is available can ensure Success Code
@@ -44,9 +44,9 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         {
             var client = server.CreateClient();
             var request = TestConstants.ValidFlightSearchRequest +
-                                        "?startLocation=" + startLocation +
-                                        "&endDestination=" + destination +
-                                        "&departureDate=" + DateTime.UtcNow.Date.AddDays(1);
+                                        "?" + TestConstants.StartLocation + "=" + startLocation +
+                                        "&" + TestConstants.EndLocation + "=" + destination +
+                                        "&" + TestConstants.DepartureDate + "=" + DateTime.UtcNow.Date.AddDays(1);
 
             var response = await client.GetAsync(request);
 
@@ -59,9 +59,9 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         {
             var client = server.CreateClient();
             var request = TestConstants.InvalidFlightSearchRequest +
-                                        "?startLocation=" + startLocation +
-                                        "&endDestination=" + destination +
-                                        "&departureDate=" + DateTime.UtcNow.Date.AddDays(1);
+                                        "?" + TestConstants.StartLocation + "=" + startLocation +
+                                        "&" + TestConstants.EndLocation + "=" + destination +
+                                        "&" + TestConstants.DepartureDate + "=" + DateTime.UtcNow.Date.AddDays(1);
 
             var response = await client.GetAsync(request);
 
