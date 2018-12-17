@@ -1,7 +1,10 @@
-﻿namespace OnlineFlightSearchAPI.Repositories
+﻿using OnlineFlightSearchAPI.Models;
+using System.Collections.Generic;
+
+namespace OnlineFlightSearchAPI.Repositories
 {
     public interface IAirportRepository
     {
-        bool IsAirportValid(string airportCode);
+        List<AirportDetail> FetchAirportDetail(string airportCode);
     }
 }

@@ -38,7 +38,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
             var searchFlightsController = new SearchFlightsController(mockSearchFlightService.Object);
             var actualResult = searchFlightsController.SearchFlightDetails(startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString()) as OkObjectResult;
 
-            Assert.Equal(HttpStatusCode.OK.GetHashCode(), actualResult.StatusCode);
+            Assert.Equal((int)HttpStatusCode.OK, actualResult.StatusCode);
         }
 
         [Theory]
@@ -47,7 +47,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         public async Task SearchFlightDetails_InvalidStartandEndLocationRequest_ReturnsHttpStatusBadRequest400(string startLocation, string destination)
         {
             var client = server.CreateClient();
-            var request = $"{TestConstants.ValidFlightSearchRequest}?{ TestConstants.StartLocation }={ startLocation }&{ TestConstants.EndLocation }={ destination }&{ TestConstants.DepartureDate }={ DateTime.UtcNow.Date.AddDays(1)}";
+            var request = string.Format(TestConstants.ValidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString());
 
             var response = await client.GetAsync(request);
 
@@ -59,7 +59,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         public async Task SearchFlightDetails_InvalidAPIRequest_ReturnsHttpStatusNotFound404(string startLocation, string destination)
         {
             var client = server.CreateClient();
-            var request = $"{TestConstants.InvalidFlightSearchRequest}?{ TestConstants.StartLocation }={ startLocation }&{ TestConstants.EndLocation }={ destination }&{ TestConstants.DepartureDate }={ DateTime.UtcNow.Date.AddDays(1)}";
+            var request = string.Format(TestConstants.InvalidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString());
 
             var response = await client.GetAsync(request);
 

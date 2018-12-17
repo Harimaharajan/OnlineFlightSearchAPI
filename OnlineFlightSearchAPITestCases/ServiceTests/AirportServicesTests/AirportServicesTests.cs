@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AutoFixture;
 using Moq;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
@@ -15,9 +15,7 @@ namespace OnlineFlightSearchAPITestCases
         [InlineData(null)]
         public void IsAirportValid_IfAirportCodeIsNullOrEmpty_ReturnsFalse(string airportCode)
         {
-            var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.IsAirportValid(airportCode)).Returns(false);
-            var airportService = new AirportServices(mockAirportRepository.Object);
+            var airportService = new AirportServices(new Mock<IAirportRepository>().Object);
 
             var result = airportService.IsAirportValid(airportCode);
 
@@ -30,7 +28,7 @@ namespace OnlineFlightSearchAPITestCases
         public void IsAirportValid_IfAirportCodeIsValid_ReturnsTrue(string airportCode)
         {
             var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.IsAirportValid(airportCode)).Returns(true);
+            mockAirportRepository.Setup(x => x.FetchAirportDetail(airportCode)).Returns(ExpectedAirportDetail(airportCode));
             var airportService = new AirportServices(mockAirportRepository.Object);
 
             var actual = airportService.IsAirportValid(airportCode);
@@ -43,12 +41,24 @@ namespace OnlineFlightSearchAPITestCases
         public void IsAirportValid_IfAirportCodeIsNotValid_ReturnsFalse(string airportCode)
         {
             var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.IsAirportValid(airportCode)).Returns(false);
+            mockAirportRepository.Setup(x => x.FetchAirportDetail(airportCode)).Returns<List<AirportDetail>>(null);
             var airportService = new AirportServices(mockAirportRepository.Object);
 
             var result = airportService.IsAirportValid(airportCode);
 
             Assert.False(result);
+        }
+
+        private List<AirportDetail> ExpectedAirportDetail(string airportCode)
+        {
+            var fixture = new Fixture();
+            List<AirportDetail> airportDetails = new List<AirportDetail>{
+                                                         fixture.Build<AirportDetail>()
+                                                        .With(x => x.AirportCode, airportCode)
+                                                        .Create()
+                                                     };
+
+            return airportDetails;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using OnlineFlightSearchAPI.Models;
+﻿using OnlineFlightSearchAPI.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OnlineFlightSearchAPI.Repositories
 {
@@ -8,15 +8,15 @@ namespace OnlineFlightSearchAPI.Repositories
     {
         private readonly List<AirportDetail> airportDetails = new List<AirportDetail>();
 
-        public bool IsAirportValid(string airportCode)
+        public List<AirportDetail> FetchAirportDetail(string airportCode)
         {
             if (airportDetails != null)
             {
-                return airportDetails.Where(x => x.AirportCode == airportCode).Any();
+                return airportDetails.Where(x => x.AirportCode == airportCode).ToList();
             }
             else
             {
-                return false;
+                return null;
             }
         }
     }
