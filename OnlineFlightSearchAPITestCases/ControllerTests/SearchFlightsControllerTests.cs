@@ -47,7 +47,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         public async Task SearchFlightDetails_InvalidStartandEndLocationRequest_ReturnsHttpStatusBadRequest400(string startLocation, string destination)
         {
             var client = server.CreateClient();
-            var request = string.Format(TestConstants.ValidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString());
+            var request = String.Format(TestConstants.ValidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString());
 
             var response = await client.GetAsync(request);
 
@@ -59,7 +59,7 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         public async Task SearchFlightDetails_InvalidAPIRequest_ReturnsHttpStatusNotFound404(string startLocation, string destination)
         {
             var client = server.CreateClient();
-            var request = string.Format(TestConstants.InvalidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString());
+            var request = String.Format(TestConstants.InvalidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString());
 
             var response = await client.GetAsync(request);
 
