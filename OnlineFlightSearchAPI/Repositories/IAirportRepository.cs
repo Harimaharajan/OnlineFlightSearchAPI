@@ -5,6 +5,6 @@ namespace OnlineFlightSearchAPI.Repositories
 {
     public interface IAirportRepository
     {
-        List<AirportDetail> FetchAirportDetail(string airportCode);
+        IEnumerable<AirportDetail> FetchAirportDetail(string airportCode);
     }
 }

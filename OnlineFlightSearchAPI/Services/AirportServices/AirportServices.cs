@@ -16,8 +16,7 @@ namespace OnlineFlightSearchAPI.FlightServices
         {
             if (!string.IsNullOrEmpty(airportCode))
             {
-                var result = _airportRepository.FetchAirportDetail(airportCode);
-                if (result != null)
+                if (_airportRepository.FetchAirportDetail(airportCode) != null)
                 {
                     return true;
                 }

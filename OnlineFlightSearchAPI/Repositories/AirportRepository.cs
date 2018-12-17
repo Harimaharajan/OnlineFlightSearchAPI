@@ -1,18 +1,18 @@
-﻿using OnlineFlightSearchAPI.Models;
+﻿using System.Linq;
+using OnlineFlightSearchAPI.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OnlineFlightSearchAPI.Repositories
 {
     public class AirportRepository : IAirportRepository
     {
-        private readonly List<AirportDetail> airportDetails = new List<AirportDetail>();
+        private readonly List<AirportDetail> airportDetail = new List<AirportDetail>();
 
-        public List<AirportDetail> FetchAirportDetail(string airportCode)
+        public IEnumerable<AirportDetail> FetchAirportDetail(string airportCode)
         {
-            if (airportDetails != null)
+            if (airportDetail.Count != 0)
             {
-                return airportDetails.Where(x => x.AirportCode == airportCode).ToList();
+                return airportDetail.Where(x => x.AirportCode == airportCode);
             }
             else
             {
