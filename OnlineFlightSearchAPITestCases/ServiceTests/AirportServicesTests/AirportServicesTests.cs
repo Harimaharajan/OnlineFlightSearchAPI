@@ -41,12 +41,17 @@ namespace OnlineFlightSearchAPITestCases
         public void IsAirportValid_IfAirportCodeIsNotValid_ReturnsFalse(string airportCode)
         {
             var mockAirportRepository = new Mock<IAirportRepository>();
-            mockAirportRepository.Setup(x => x.FetchAirportDetail(airportCode)).Returns<IEnumerable<AirportDetail>>(null);
+            mockAirportRepository.Setup(x => x.FetchAirportDetail(airportCode)).Returns(EmptyAirportListForInvalidAirportCode(airportCode));
             var airportService = new AirportServices(mockAirportRepository.Object);
 
             var result = airportService.IsAirportValid(airportCode);
 
             Assert.False(result);
+        }
+
+        private IEnumerable<AirportDetail> EmptyAirportListForInvalidAirportCode(string airportCode)
+        {
+            return new List<AirportDetail>();
         }
 
         private List<AirportDetail> ExpectedAirportDetail(string airportCode)

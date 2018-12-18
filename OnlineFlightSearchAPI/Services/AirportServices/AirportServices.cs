@@ -1,5 +1,5 @@
-﻿using OnlineFlightSearchAPI.Repositories;
-using System.Linq;
+﻿using System.Linq;
+using OnlineFlightSearchAPI.Repositories;
 
 namespace OnlineFlightSearchAPI.FlightServices
 {
@@ -14,16 +14,14 @@ namespace OnlineFlightSearchAPI.FlightServices
 
         public bool IsAirportValid(string airportCode)
         {
-            if (!string.IsNullOrEmpty(airportCode))
+            if (string.IsNullOrEmpty(airportCode))
             {
-                if (_airportRepository.FetchAirportDetail(airportCode) != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
+            }
+
+            if (_airportRepository.FetchAirportDetail(airportCode).Any())
+            {
+                return true;
             }
 
             return false;
