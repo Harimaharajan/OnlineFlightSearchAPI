@@ -6,18 +6,11 @@ namespace OnlineFlightSearchAPI.Repositories
 {
     public class AirportRepository : IAirportRepository
     {
-        private readonly IEnumerable<AirportDetail> airportDetail = new List<AirportDetail>();
+        private readonly IEnumerable<AirportDetail> _airportDetail = new List<AirportDetail>();
 
         public IEnumerable<AirportDetail> FetchAirportDetail(string airportCode)
         {
-            if (airportDetail.Any())
-            {
-                return airportDetail.Where(x => x.AirportCode == airportCode);
-            }
-            else
-            {
-                return airportDetail;
-            }
+            return _airportDetail.Where(x => x.AirportCode == airportCode);
         }
     }
 }

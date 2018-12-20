@@ -54,10 +54,10 @@ namespace OnlineFlightSearchAPITestCases
             return new List<AirportDetail>();
         }
 
-        private List<AirportDetail> ExpectedAirportDetail(string airportCode)
+        private IEnumerable<AirportDetail> ExpectedAirportDetail(string airportCode)
         {
             var fixture = new Fixture();
-            List<AirportDetail> airportDetails = new List<AirportDetail>{
+            IEnumerable<AirportDetail> airportDetails = new List<AirportDetail>{
                                                          fixture.Build<AirportDetail>()
                                                         .With(x => x.AirportCode, airportCode)
                                                         .Create()
