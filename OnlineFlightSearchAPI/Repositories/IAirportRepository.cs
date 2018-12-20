@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using OnlineFlightSearchAPI.Models;
+﻿using OnlineFlightSearchAPI.Models;
+using System.Collections.Generic;
 
 namespace OnlineFlightSearchAPI.Repositories
 {
     public interface IAirportRepository
     {
-        List<AirportDetail> airportDetails { get; set; }
+        IEnumerable<AirportDetail> FetchAirportDetail(string airportCode);
     }
 }

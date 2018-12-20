@@ -4,17 +4,6 @@ namespace OnlineFlightSearchAPI.Models
 {
     public class FlightDetail
     {
-        public FlightDetail(string flightCode, string startLocation, string destination, string departureDate, string travelTime, decimal ticketFare, int availabilityCount)
-        {
-            FlightCode = flightCode;
-            StartLocation = startLocation;
-            Destination = destination;
-            DepartureDate = Convert.ToDateTime(departureDate);
-            TravelTime = travelTime;
-            TicketFare = ticketFare;
-            AvailabilityCount = availabilityCount;
-        }
-
         public string FlightCode { get; set; }
 
         public string StartLocation { get; set; }

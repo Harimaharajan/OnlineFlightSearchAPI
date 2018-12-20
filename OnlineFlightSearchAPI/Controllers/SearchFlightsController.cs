@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using OnlineFlightSearchAPI.FlightServices;
-using OnlineFlightSearchAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Net;
 
 namespace OnlineFlightSearchAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/Flight/[action]")]
     [ApiController]
     public class SearchFlightsController : ControllerBase
     {
@@ -19,21 +17,33 @@ namespace OnlineFlightSearchAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<FlightDetail>> SearchFlightDetails(string startLocation, string endDestination, DateTime departureDate)
+        [ActionName("Search")]
+        public IActionResult SearchFlightDetails([FromQuery]string startLocation, [FromQuery]string endDestination, [FromQuery]string departureDate)
         {
-            List<FlightDetail> flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);
-            return flightDetails;
-        }
-
-        public ObjectResult SearchFlight(string startLocation, string endDestination, DateTime departureDate)
-        {
-            List<FlightDetail> flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, departureDate);
-
-            if (flightDetails != null)
+            try
             {
-                return Ok(HttpStatusCode.OK);
+                var flightDetails = _searchFlightService.SearchFlightDetails(startLocation, endDestination, Convert.ToDateTime(departureDate));
+
+                if (flightDetails == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(flightDetails);
             }
-            return Ok(HttpStatusCode.BadRequest);
+            catch (ValidationException validationException)
+            {
+                if (validationException.Message == ValidationMessages.NoFlightsAvailable)
+                {
+                    return NoContent();
+                }
+
+                return BadRequest(validationException.Message);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }
