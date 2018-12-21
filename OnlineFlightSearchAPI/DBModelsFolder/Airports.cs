@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace OnlineFlightSearchAPI.Models
+namespace OnlineFlightSearchAPI.DBModelsFolder
 {
-    public class AirportDetail
+    public partial class Airports
     {
         public string AirportCode { get; set; }
-
         public string City { get; set; }
-
         public string Country { get; set; }
-
-        public DateTimeKind AirportTimeZone { get; set; }
+        public DateTime? TimeZone { get; set; }
     }
 }

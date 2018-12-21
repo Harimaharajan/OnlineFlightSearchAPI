@@ -33,11 +33,6 @@ namespace OnlineFlightSearchAPI.Controllers
             }
             catch (ValidationException validationException)
             {
-                if (validationException.Message == ValidationMessages.NoFlightsAvailable)
-                {
-                    return NoContent();
-                }
-
                 return BadRequest(validationException.Message);
             }
             catch (Exception exception)
