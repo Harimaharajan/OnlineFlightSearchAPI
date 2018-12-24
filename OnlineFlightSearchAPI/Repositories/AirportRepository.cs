@@ -9,15 +9,20 @@ namespace OnlineFlightSearchAPI.Repositories
     {
         //private readonly IEnumerable<AirportDetail> _airportDetail = new List<AirportDetail>();
 
-        private FlightDBContext _flightDBContext = new FlightDBContext();
+        private readonly FlightDBContext _flightDBContext = new FlightDBContext();
+
+        public AirportRepository(FlightDBContext flightDBContext)
+        {
+            _flightDBContext = flightDBContext;
+        }
 
         public IEnumerable<AirportDetail> FetchAirportDetail(string airportCode)
         {
             return _flightDBContext.Airports.Where(x => x.AirportCode == airportCode)
-                                            .Select(x => new AirportDetail
-                                            {
-                                                AirportCode = x.AirportCode
-                                            }).AsEnumerable();
+                                        .Select(x => new AirportDetail
+                                        {
+                                            AirportCode = x.AirportCode
+                                        });
         }
     }
 }

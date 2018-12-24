@@ -12,23 +12,18 @@ namespace OnlineFlightSearchAPI.Repositories.FlightRepository
     {
         //private readonly List<FlightDetail> _flightDetails = new List<FlightDetail>();
 
-        private FlightDBContext _flightDBContext = new FlightDBContext();
+        private readonly FlightDBContext _flightDBContext;
+
+        public FlightRepository(FlightDBContext flightDBContext)
+        {
+            _flightDBContext = flightDBContext;
+        }
 
         public List<FlightDetail> FetchFlightDetails(string startLocation, string endLocation, DateTime departureDate)
         {
             var searchResult = _flightDBContext.Flights.Where(x => (x.StartLocation == startLocation) &&
                                                         (x.EndLocation == endLocation) &&
-                                                        (x.DepartureDate.Date == departureDate.Date))
-                                                        .Select(x => new FlightDetail
-                                                        {
-                                                            FlightCode = x.FlightCode,
-                                                            StartLocation = x.StartLocation,
-                                                            Destination = x.EndLocation,
-                                                            DepartureDate = x.DepartureDate,
-                                                            TravelTime = x.Length.ToString(),
-                                                            TicketFare = x.TicketFare,
-                                                            AvailabilityCount = x.AvailabilityCount
-                                                        }).ToList();
+                                                        (x.DepartureDate.Date == departureDate.Date)).ToList();
             if (searchResult.Count == 0)
             {
                 throw new ValidationException(ValidationMessages.NoFlightsAvailable);

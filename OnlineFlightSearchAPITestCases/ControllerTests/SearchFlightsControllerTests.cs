@@ -73,9 +73,9 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
             var fixture = new Fixture();
             List<FlightDetail> flightDetails = fixture.Build<FlightDetail>()
                                          .With(x => x.StartLocation, validAirportCodes[0])
-                                         .With(x => x.Destination, validAirportCodes[1])
+                                         .With(x => x.EndLocation, validAirportCodes[1])
                                          .With(x => x.DepartureDate, DateTime.UtcNow.AddDays(1))
-                                         .With(x => x.TravelTime, "2:35").CreateMany(4).ToList();
+                                         .With(x => x.Length, Convert.ToDecimal("2.35")).CreateMany(4).ToList();
 
             return flightDetails;
         }

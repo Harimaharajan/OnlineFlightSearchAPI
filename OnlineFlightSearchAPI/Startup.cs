@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OnlineFlightSearchAPI.DBModelsFolder;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Repositories;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
@@ -26,6 +27,10 @@ namespace OnlineFlightSearchAPI
             services.AddTransient<IAirportServices, AirportServices>();
             services.AddTransient<IFlightRepository, FlightRepository>();
             services.AddTransient<IAirportRepository, AirportRepository>();
+            services.AddDbContext<FlightDBContext>();
+            //services.AddDbContext<FlightDBContext>(options =>
+            //                            options.UseSqlServer(Configuration.GetConnectionString("SqlConnectionString")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
