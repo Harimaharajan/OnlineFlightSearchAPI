@@ -9,9 +9,9 @@ namespace OnlineFlightSearchAPI.Repositories
     {
         //private readonly IEnumerable<AirportDetail> _airportDetail = new List<AirportDetail>();
 
-        private readonly FlightDBContext _flightDBContext = new FlightDBContext();
-
-        public AirportRepository(FlightDBContext flightDBContext)
+        private readonly IFlightDBContext _flightDBContext;
+        
+        public AirportRepository(IFlightDBContext flightDBContext)
         {
             _flightDBContext = flightDBContext;
         }

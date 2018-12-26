@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OnlineFlightSearchAPI.Models;
+using OnlineFlightSearchAPI.Repositories.FlightRepository;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using OnlineFlightSearchAPI.Models;
-using OnlineFlightSearchAPI.Repositories.FlightRepository;
 
 namespace OnlineFlightSearchAPI.FlightServices
 {
@@ -37,7 +37,14 @@ namespace OnlineFlightSearchAPI.FlightServices
 
             if (ValidateStartAndEndLocation(startLocation, endLocation))
             {
-                return _flightRepository.FetchFlightDetails(startLocation, endLocation, departureDate);
+                var flightDetails = _flightRepository.FetchFlightDetails(startLocation, endLocation, departureDate);
+
+                if (flightDetails.Count == 0)
+                {
+                    throw new ValidationException(ValidationMessages.NoFlightsAvailable);
+                }
+
+                return flightDetails;
             }
 
             return null;

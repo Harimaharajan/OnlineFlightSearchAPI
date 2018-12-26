@@ -4,12 +4,8 @@ using OnlineFlightSearchAPI.Models;
 
 namespace OnlineFlightSearchAPI.DBModelsFolder
 {
-    public partial class FlightDBContext : DbContext
+    public partial class FlightDBContext : DbContext, IFlightDBContext
     {
-        public FlightDBContext()
-        {
-        }
-
         public FlightDBContext(DbContextOptions<FlightDBContext> options)
             : base(options)
         {

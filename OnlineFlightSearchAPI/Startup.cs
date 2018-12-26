@@ -27,10 +27,7 @@ namespace OnlineFlightSearchAPI
             services.AddTransient<IAirportServices, AirportServices>();
             services.AddTransient<IFlightRepository, FlightRepository>();
             services.AddTransient<IAirportRepository, AirportRepository>();
-            services.AddDbContext<FlightDBContext>();
-            //services.AddDbContext<FlightDBContext>(options =>
-            //                            options.UseSqlServer(Configuration.GetConnectionString("SqlConnectionString")));
-
+            services.AddDbContext<IFlightDBContext, FlightDBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
