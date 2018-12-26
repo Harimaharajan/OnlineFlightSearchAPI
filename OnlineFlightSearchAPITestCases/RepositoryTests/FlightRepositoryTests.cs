@@ -59,13 +59,13 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
 
         private Mock<DbSet<FlightDetail>> FlightDetailsMock(List<FlightDetail> flightDetailsList)
         {
-            var airportDetail = flightDetailsList.AsQueryable();
+            var flightDetail = flightDetailsList.AsQueryable();
             var mockFlightDbSet = new Mock<DbSet<FlightDetail>>();
 
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.Provider).Returns(airportDetail.Provider);
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.Expression).Returns(airportDetail.Expression);
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.ElementType).Returns(airportDetail.ElementType);
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.GetEnumerator()).Returns(airportDetail.GetEnumerator());
+            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.Provider).Returns(flightDetail.Provider);
+            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.Expression).Returns(flightDetail.Expression);
+            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.ElementType).Returns(flightDetail.ElementType);
+            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.GetEnumerator()).Returns(flightDetail.GetEnumerator());
 
             return mockFlightDbSet;
         }
