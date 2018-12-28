@@ -10,5 +10,10 @@
 
         public const string NoFlightsAvailable = "No Flights Available";
         public const string StartandEndLocationCannotBeSame = "Start and End Location cannot be same";
+
+        public const string UserNameCannotBeEmpty = "User Name cannot be Empty";
+        public const string PasswordCannotBeEmpty = "Password cannot be Empty";
+        public const string UserNameAndPasswordCannotBeEmpty = "UserName and Password cannot be Empty";
+        public const string InvalidUserCredentials = "Invalid User Credentials";
     }
 }

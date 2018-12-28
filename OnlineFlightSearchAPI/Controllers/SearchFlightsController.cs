@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineFlightSearchAPI.FlightServices;
 
@@ -7,6 +8,7 @@ namespace OnlineFlightSearchAPI.Controllers
 {
     [Route("api/Flight/[action]")]
     [ApiController]
+    [Authorize]
     public class SearchFlightsController : ControllerBase
     {
         private readonly ISearchFlightService _searchFlightService;

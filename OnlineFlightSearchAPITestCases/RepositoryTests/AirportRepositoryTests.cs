@@ -80,6 +80,5 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
 
             return mockAirportDbSet;
         }
-
     }
 }

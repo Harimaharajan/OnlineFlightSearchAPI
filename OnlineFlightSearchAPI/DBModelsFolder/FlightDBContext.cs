@@ -13,6 +13,7 @@ namespace OnlineFlightSearchAPI.DBModelsFolder
 
         public DbSet<AirportDetail> Airports { get; set; }
         public DbSet<FlightDetail> Flights { get; set; }
+        public DbSet<UserLoginModel> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

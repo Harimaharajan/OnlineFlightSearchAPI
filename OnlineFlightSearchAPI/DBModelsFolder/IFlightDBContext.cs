@@ -7,5 +7,6 @@ namespace OnlineFlightSearchAPI.DBModelsFolder
     {
         DbSet<AirportDetail> Airports { get; set; }
         DbSet<FlightDetail> Flights { get; set; }
+        DbSet<UserLoginModel> Users { get; set; }
     }
 }

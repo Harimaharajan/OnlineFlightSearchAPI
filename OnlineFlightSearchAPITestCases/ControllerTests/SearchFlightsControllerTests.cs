@@ -18,7 +18,7 @@ using Xunit;
 
 namespace OnlineFlightSearchAPITestCases.ControllerTests
 {
-    public class SearchFlightsControllerTests : IClassFixture<WebApplicationFactory<OnlineFlightSearchAPI.Startup>>
+    public class SearchFlightsControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly TestServer server;
 
