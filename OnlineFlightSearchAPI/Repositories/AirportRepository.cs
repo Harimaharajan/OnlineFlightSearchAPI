@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using OnlineFlightSearchAPI.DBModelsFolder;
+using OnlineFlightSearchAPI.DBContext;
 using OnlineFlightSearchAPI.Models;
 
 namespace OnlineFlightSearchAPI.Repositories
 {
     public class AirportRepository : IAirportRepository
     {
-        //private readonly IEnumerable<AirportDetail> _airportDetail = new List<AirportDetail>();
-
         private readonly IFlightDBContext _flightDBContext;
-        
+
         public AirportRepository(IFlightDBContext flightDBContext)
         {
             _flightDBContext = flightDBContext;

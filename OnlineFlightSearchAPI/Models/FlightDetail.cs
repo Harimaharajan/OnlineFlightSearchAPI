@@ -6,6 +6,8 @@ namespace OnlineFlightSearchAPI.Models
     public class FlightDetail
     {
         [Key]
+        public int FlightID { get; set; }
+
         public string FlightCode { get; set; }
 
         public string StartLocation { get; set; }
@@ -16,7 +18,7 @@ namespace OnlineFlightSearchAPI.Models
 
         public decimal Length { get; set; }
 
-        public int TicketFare { get; set; }
+        public decimal TicketFare { get; set; }
 
         public int AvailabilityCount { get; set; }
 

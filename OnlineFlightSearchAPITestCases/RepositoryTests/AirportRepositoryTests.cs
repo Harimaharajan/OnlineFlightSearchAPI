@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using OnlineFlightSearchAPI.DBModelsFolder;
+using OnlineFlightSearchAPI.DBContext;
 using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.Repositories;
 using Xunit;
 
 namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
 {
-    public class AirportRepositoryTests
+    public class AirportRepositoryTests : MockDBContext
     {
         [Theory]
         [InlineData("BUD")]
-        public void FetchAirportDetail_IfValidAirportCodeProvided_ReturnsAirportDetails(string airportCode)
+        public void FetchAirportDetail_IfValidAirportCodeProvided_ReturnsListOfAirportDetails(string airportCode)
         {
-            var mockAirportDbSet = new Mock<DbSet<AirportDetail>>();
             var airportDetailsList = new List<AirportDetail>
             {
                 new AirportDetail { AirportCode = airportCode },
             };
-            mockAirportDbSet = AirportDetailDbSetMock(airportDetailsList);
+
+            var mockAirportDbSet = MockDbSet(airportDetailsList);
 
             var flightDbContextMock = new Mock<IFlightDBContext>();
             flightDbContextMock.Setup(x => x.Airports).Returns(mockAirportDbSet.Object);
@@ -32,14 +31,13 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
             Assert.Equal(airportCode, result.FirstOrDefault().AirportCode);
         }
 
-        [Theory]
-        [InlineData(null)]
-        public void FetchAirportDetail_IfNullIsProvidedForAirportCode_ReturnsEmpty(string airportCode)
+        [Fact]
+        public void FetchAirportDetail_IfNullIsProvidedForAirportCode_ReturnsEmptyList()
         {
-            var mockAirportDbSet = new Mock<DbSet<AirportDetail>>();
-            var airportDetailsList = new List<AirportDetail> { };
+            string airportCode = null;
+            List<AirportDetail> airportDetailsEmptyList = new List<AirportDetail> { };
 
-            mockAirportDbSet = AirportDetailDbSetMock(airportDetailsList);
+            var mockAirportDbSet = MockDbSet(airportDetailsEmptyList);
 
             var flightDbContextMock = new Mock<IFlightDBContext>();
             flightDbContextMock.Setup(x => x.Airports).Returns(mockAirportDbSet.Object);
@@ -52,12 +50,10 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
 
         [Theory]
         [InlineData("XYZ")]
-        public void FetchAirportDetail_IfInvalidAirportCodeProvided_ReturnsEmpty(string airportCode)
+        public void FetchAirportDetail_IfInvalidAirportCodeProvided_ReturnsEmptyList(string airportCode)
         {
-            var mockAirportDbSet = new Mock<DbSet<AirportDetail>>();
-            var airportDetailsList = new List<AirportDetail> { };
-
-            mockAirportDbSet = AirportDetailDbSetMock(airportDetailsList);
+            var airportDetailsEmptyList = new List<AirportDetail> { };
+            var mockAirportDbSet = MockDbSet(airportDetailsEmptyList);
 
             var flightDbContextMock = new Mock<IFlightDBContext>();
             flightDbContextMock.Setup(x => x.Airports).Returns(mockAirportDbSet.Object);
@@ -66,19 +62,6 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
             var actual = airportRepository.FetchAirportDetail(airportCode);
 
             Assert.Empty(actual);
-        }
-
-        private Mock<DbSet<AirportDetail>> AirportDetailDbSetMock(IEnumerable<AirportDetail> airportDetails)
-        {
-            var airportDetail = airportDetails.AsQueryable();
-            var mockAirportDbSet = new Mock<DbSet<AirportDetail>>();
-
-            mockAirportDbSet.As<IQueryable<AirportDetail>>().Setup(m => m.Provider).Returns(airportDetail.Provider);
-            mockAirportDbSet.As<IQueryable<AirportDetail>>().Setup(m => m.Expression).Returns(airportDetail.Expression);
-            mockAirportDbSet.As<IQueryable<AirportDetail>>().Setup(m => m.ElementType).Returns(airportDetail.ElementType);
-            mockAirportDbSet.As<IQueryable<AirportDetail>>().Setup(m => m.GetEnumerator()).Returns(airportDetail.GetEnumerator());
-
-            return mockAirportDbSet;
         }
     }
 }

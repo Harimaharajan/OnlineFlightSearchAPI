@@ -4,6 +4,6 @@ namespace OnlineFlightSearchAPI.Repositories
 {
     public interface IUserRepository
     {
-        UserLoginModel FetchValidUserDetails(string userName, string password);
+        Users FetchValidUserDetails(string userName, string password);
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OnlineFlightSearchAPI.DBModelsFolder;
+using OnlineFlightSearchAPI.DBContext;
 using OnlineFlightSearchAPI.Models;
 
 namespace OnlineFlightSearchAPI.Repositories.FlightRepository
 {
     public class FlightRepository : IFlightRepository
     {
-        //private readonly List<FlightDetail> _flightDetails = new List<FlightDetail>();
-
         private readonly IFlightDBContext _flightDBContext;
 
         public FlightRepository(IFlightDBContext flightDBContext)

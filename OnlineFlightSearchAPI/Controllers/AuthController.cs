@@ -25,7 +25,7 @@ namespace OnlineFlightSearchAPI.Controllers
 
         [HttpPost]
         [ActionName("RequestToken")]
-        public IActionResult RequestToken([FromBody]UserLoginModel userLoginModel)
+        public IActionResult RequestToken([FromBody]Users userLoginModel)
         {
             try
             {
@@ -44,20 +44,14 @@ namespace OnlineFlightSearchAPI.Controllers
             }
         }
 
-        private object GenerateJwtToken()
+        private string GenerateJwtToken()
         {
-            var jwtToken = JwtTokenBuilder();
-            return jwtToken;
-        }
-
-        private object JwtTokenBuilder()
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParameter:SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[Constants.JWTSecretKey]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var jwtToken = new JwtSecurityToken(
-                issuer: _configuration["JWTParameter:Issuer"],
-                audience: _configuration["JWTParameter:Audience"],
+                issuer: _configuration[Constants.JWTIssuer],
+                audience: _configuration[Constants.JWTAudience],
                 signingCredentials: credentials,
                 expires: DateTime.Now.AddHours(1)
                 );

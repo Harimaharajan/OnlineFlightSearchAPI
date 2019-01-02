@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using OnlineFlightSearchAPI.DBModelsFolder;
+using OnlineFlightSearchAPI.DBContext;
 using OnlineFlightSearchAPI.Models;
 
 namespace OnlineFlightSearchAPI.Repositories
@@ -12,7 +12,7 @@ namespace OnlineFlightSearchAPI.Repositories
         {
             _flightDBContext = flightDBContext;
         }
-        public UserLoginModel FetchValidUserDetails(string userName, string password)
+        public Users FetchValidUserDetails(string userName, string password)
         {
             return _flightDBContext.Users.Where(user => user.UserName == userName &&
                                                         user.Password == password)

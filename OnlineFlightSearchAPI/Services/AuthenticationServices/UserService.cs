@@ -1,35 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.Repositories;
+using OnlineFlightSearchAPI.Validator;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace OnlineFlightSearchAPI.Services.AuthenticationServices
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly UserValidator _userValidator;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, UserValidator userValidator)
         {
             _userRepository = userRepository;
+            _userValidator = userValidator;
         }
 
-        public bool IsValidUser(UserLoginModel userLoginModel)
+        public bool IsValidUser(Users userLoginModel)
         {
-            if (userLoginModel == null)
-            {
-                throw new ValidationException(ValidationMessages.UserNameAndPasswordCannotBeEmpty);
-            }
-
-            if (string.IsNullOrWhiteSpace(userLoginModel.UserName))
-            {
-                throw new ValidationException(ValidationMessages.UserNameCannotBeEmpty);
-            }
-
-            if (string.IsNullOrWhiteSpace(userLoginModel.Password))
-            {
-                throw new ValidationException(ValidationMessages.PasswordCannotBeEmpty);
-            }
+            _userValidator.ValidateAndThrow(userLoginModel);
 
             var user = _userRepository.FetchValidUserDetails(userLoginModel.UserName, userLoginModel.Password);
             if (user == null)

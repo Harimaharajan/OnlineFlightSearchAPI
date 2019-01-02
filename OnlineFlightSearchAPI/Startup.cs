@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using OnlineFlightSearchAPI.DBModelsFolder;
+using OnlineFlightSearchAPI.DBContext;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Repositories;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
 using OnlineFlightSearchAPI.Services.AuthenticationServices;
+using OnlineFlightSearchAPI.Validator;
 
 namespace OnlineFlightSearchAPI
 {
@@ -33,16 +34,19 @@ namespace OnlineFlightSearchAPI
             services.AddTransient<IFlightRepository, FlightRepository>();
             services.AddTransient<IAirportRepository, AirportRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<UserValidator, UserValidator>();
             services.AddDbContext<IFlightDBContext, FlightDBContext>();
+
+            string secretKey = Configuration.GetSection("JWTParameter:SecretKey").Value;
 
             var jettokenparams = new TokenValidationParameters()
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
-                ValidIssuer = Configuration["JWTParameter:Issuer"].ToString(),
-                ValidAudience = Configuration["JWTParameter:Audience"].ToString(),
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTParameter:SecretKey"]))
+                ValidIssuer = Configuration.GetSection("JWTParameter:Issuer").Value,
+                ValidAudience = Configuration.GetSection("JWTParameter:Audience").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
             };
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

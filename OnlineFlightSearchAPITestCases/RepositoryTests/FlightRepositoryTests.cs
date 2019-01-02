@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using OnlineFlightSearchAPI.DBModelsFolder;
+using OnlineFlightSearchAPI.DBContext;
 using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
 using Xunit;
 
 namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
 {
-    public class FlightRepositoryTests
+    public class FlightRepositoryTests : MockDBContext
     {
         [Theory]
         [InlineData("BUD", "LTN")]
@@ -26,7 +25,7 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
                     DepartureDate=DateTime.UtcNow.AddDays(1)
                 }
             };
-            mockFlightsDbSet = FlightDetailsMock(flightDetailsList);
+            mockFlightsDbSet = MockDbSet(flightDetailsList);
 
             var mockDBContext = new Mock<IFlightDBContext>();
             mockDBContext.Setup(x => x.Flights).Returns(mockFlightsDbSet.Object);
@@ -42,11 +41,11 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
 
         [Theory]
         [InlineData("XYZ", "LTN")]
-        public void FetchFlightDetails_IfInvalidSearchParametersProvided_ReturnsEmpty(string startLocation, string endLocation)
+        public void FetchFlightDetails_IfInvalidSearchParametersProvided_ReturnsEmptyList(string startLocation, string endLocation)
         {
             var mockFlightsDbSet = new Mock<DbSet<FlightDetail>>();
             var flightDetailsList = new List<FlightDetail> { };
-            mockFlightsDbSet = FlightDetailsMock(flightDetailsList);
+            mockFlightsDbSet = MockDbSet(flightDetailsList);
 
             var mockDBContext = new Mock<IFlightDBContext>();
             mockDBContext.Setup(x => x.Flights).Returns(mockFlightsDbSet.Object);
@@ -55,19 +54,6 @@ namespace OnlineFlightSearchAPI.UnitTests.RepositoryTests
             var actual = flightRepository.FetchFlightDetails(startLocation, endLocation, DateTime.Now.AddDays(1));
 
             Assert.Empty(actual);
-        }
-
-        private Mock<DbSet<FlightDetail>> FlightDetailsMock(List<FlightDetail> flightDetailsList)
-        {
-            var flightDetail = flightDetailsList.AsQueryable();
-            var mockFlightDbSet = new Mock<DbSet<FlightDetail>>();
-
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.Provider).Returns(flightDetail.Provider);
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.Expression).Returns(flightDetail.Expression);
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.ElementType).Returns(flightDetail.ElementType);
-            mockFlightDbSet.As<IQueryable<FlightDetail>>().Setup(m => m.GetEnumerator()).Returns(flightDetail.GetEnumerator());
-
-            return mockFlightDbSet;
         }
     }
 }

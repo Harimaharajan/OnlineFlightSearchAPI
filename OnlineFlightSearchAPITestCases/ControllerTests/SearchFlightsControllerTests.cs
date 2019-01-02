@@ -5,13 +5,9 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Moq;
 using OnlineFlightSearchAPI;
-using OnlineFlightSearchAPI.Controllers;
-using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.UnitTests;
 using Xunit;
@@ -30,15 +26,14 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
 
         [Theory]
         [InlineData("BUD", "LTN")]
-        public void SearchFlightDetails_ValidRequest_ReturnsHttpStatusOK200(string startLocation, string destination)
+        public async Task SearchFlightDetails_ValidRequest_ReturnsHttpStatusOK200Async(string startLocation, string destination)
         {
-            var mockSearchFlightService = new Mock<ISearchFlightService>();
-            mockSearchFlightService.Setup(x => x.SearchFlightDetails(startLocation, destination, DateTime.UtcNow.Date.AddDays(1))).Returns(ExpectedFlightDetails());
+            var client = server.CreateClient();
+            var request = String.Format(TestConstants.ValidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1));
 
-            var searchFlightsController = new SearchFlightsController(mockSearchFlightService.Object);
-            var actualResult = searchFlightsController.SearchFlightDetails(startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString()) as OkObjectResult;
+            var response = await client.GetAsync(request);
 
-            Assert.Equal((int)HttpStatusCode.OK, actualResult.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Theory]

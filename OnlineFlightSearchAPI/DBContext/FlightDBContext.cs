@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using OnlineFlightSearchAPI.Models;
 
-namespace OnlineFlightSearchAPI.DBModelsFolder
+namespace OnlineFlightSearchAPI.DBContext
 {
     public partial class FlightDBContext : DbContext, IFlightDBContext
     {
@@ -13,7 +13,7 @@ namespace OnlineFlightSearchAPI.DBModelsFolder
 
         public DbSet<AirportDetail> Airports { get; set; }
         public DbSet<FlightDetail> Flights { get; set; }
-        public DbSet<UserLoginModel> Users { get; set; }
+        public DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
