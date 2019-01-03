@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using AutoFixture;
 using Moq;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
+using OnlineFlightSearchAPI.Validator;
 using Xunit;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace OnlineFlightSearchAPITestCases
 {
@@ -23,13 +24,13 @@ namespace OnlineFlightSearchAPITestCases
                 .Setup(x => x.IsAirportValid(startLocation))
                 .Returns(false);
 
-            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), mockAirportService);
+            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.StartLocationCannotBeEmpty);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, "BUD", DateTime.Now.AddDays(1)));
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, "BUD", DateTime.UtcNow.AddDays(1)));
 
-            Assert.Equal(expectedException.Message, actualException.Message);
-        }   
+            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
+        }
 
         [Theory]
         [InlineData("BUD", null)]
@@ -41,13 +42,13 @@ namespace OnlineFlightSearchAPITestCases
                 .Setup(x => x.IsAirportValid(startLocation)).Returns(true);
             Mock.Get(mockAirportService)
                 .Setup(x => x.IsAirportValid(endLocation)).Returns(false);
-            
-            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), mockAirportService);
+
+            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.DestinationCannotBeEmpty);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.Now.AddDays(1)));
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
@@ -59,13 +60,13 @@ namespace OnlineFlightSearchAPITestCases
                 .Setup(x => x.IsAirportValid(startLocation)).Returns(false);
             Mock.Get(mockAirportService)
                 .Setup(x => x.IsAirportValid(endLocation)).Returns(true);
-            
-            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), mockAirportService);
+
+            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.InvalidStartLocation);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.Now.AddDays(1)));
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
@@ -77,13 +78,13 @@ namespace OnlineFlightSearchAPITestCases
                 .Setup(x => x.IsAirportValid(startLocation)).Returns(true);
             Mock.Get(mockAirportService)
                 .Setup(x => x.IsAirportValid(endLocation)).Returns(false);
-            
-            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), mockAirportService);
+
+            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.InvalidDestination);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.Now.AddDays(1)));
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
@@ -96,13 +97,13 @@ namespace OnlineFlightSearchAPITestCases
                 .Setup(x => x.IsAirportValid(startLocation)).Returns(true);
             Mock.Get(mockAirportService)
                 .Setup(x => x.IsAirportValid(endLocation)).Returns(true);
-            
-            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), mockAirportService);
+
+            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.StartandEndLocationCannotBeSame);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.Now.AddDays(1)));
+            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
@@ -114,13 +115,13 @@ namespace OnlineFlightSearchAPITestCases
                 .Setup(x => x.IsAirportValid(startLocation)).Returns(true);
             Mock.Get(mockAirportService)
                 .Setup(x => x.IsAirportValid(endLocation)).Returns(true);
-            
-            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), mockAirportService);
+
+            var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.InvalidDepartureDate);
             var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(-1)));
 
-            Assert.Equal(expectedException.Message, actualException.Message);
+            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
@@ -137,7 +138,7 @@ namespace OnlineFlightSearchAPITestCases
             Mock.Get(mockFlightRepo)
                 .Setup(x => x.FetchFlightDetails(startLocation, endLocation, It.IsAny<DateTime>()))
                 .Returns(ExpectedFlightDetails().ToList());
-            var searchFlightService = new FlightService(mockFlightRepo, mockAirportService);
+            var searchFlightService = new FlightService(mockFlightRepo, new FlightValidator(mockAirportService));
 
             var expectedCount = ExpectedFlightDetails().Count;
             var actualResult = searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1));
@@ -159,15 +160,14 @@ namespace OnlineFlightSearchAPITestCases
             Mock.Get(mockAirportService)
                 .Setup(x => x.IsAirportValid(endLocation)).Returns(true);
 
-            var mockFlightRepo = Mock.Of<IFlightRepository>();
-            Mock.Get(mockFlightRepo)
-                .Setup(x => x.FetchFlightDetails(startLocation, endLocation, It.IsAny<DateTime>()))
-                .Throws<ValidationException>();
+            var mockFlightRepo = new Mock<IFlightRepository>();
+            mockFlightRepo.Setup(x => x.FetchFlightDetails(startLocation, endLocation, It.IsAny<DateTime>()))
+                .Throws<System.ComponentModel.DataAnnotations.ValidationException>();
 
-            var searchFlightService = new FlightService(mockFlightRepo, mockAirportService);
+            var searchFlightService = new FlightService(mockFlightRepo.Object, new FlightValidator(mockAirportService));
 
-            var expectedException = new ValidationException();
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
+            var expectedException = new System.ComponentModel.DataAnnotations.ValidationException();
+            var actualException = Assert.Throws<System.ComponentModel.DataAnnotations.ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, endLocation, DateTime.UtcNow.AddDays(1)));
 
             Assert.Equal(expectedException.Message, actualException.Message);
         }

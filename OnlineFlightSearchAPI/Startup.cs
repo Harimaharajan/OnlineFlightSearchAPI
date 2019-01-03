@@ -35,6 +35,7 @@ namespace OnlineFlightSearchAPI
             services.AddTransient<IAirportRepository, AirportRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<UserValidator, UserValidator>();
+            services.AddTransient<FlightValidator, FlightValidator>();
             services.AddDbContext<IFlightDBContext, FlightDBContext>();
 
             string secretKey = Configuration.GetSection("JWTParameter:SecretKey").Value;

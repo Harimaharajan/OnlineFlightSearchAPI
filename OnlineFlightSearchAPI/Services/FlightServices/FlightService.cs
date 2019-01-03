@@ -1,103 +1,44 @@
-﻿using OnlineFlightSearchAPI.Models;
+﻿using FluentValidation;
+using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
+using OnlineFlightSearchAPI.Validator;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace OnlineFlightSearchAPI.FlightServices
 {
     public class FlightService : ISearchFlightService
     {
-        private readonly IAirportServices _airportService;
-
         private readonly IFlightRepository _flightRepository;
 
-        public FlightService(IFlightRepository flightRepository, IAirportServices airportServices)
+        private readonly FlightValidator _flightValidator;
+
+        public FlightService(IFlightRepository flightRepository, FlightValidator flightValidator)
         {
             _flightRepository = flightRepository;
-            _airportService = airportServices;
+            _flightValidator = flightValidator;
         }
 
         public List<FlightDetail> SearchFlightDetails(string startLocation, string endLocation, DateTime departureDate)
         {
-            if (!ValidateStartLocation(startLocation))
+            SearchFlightModel searchFlightModel = new SearchFlightModel
             {
-                throw new ValidationException(ValidationMessages.InvalidStartLocation);
+                StartLocation = startLocation,
+                EndLocation = endLocation,
+                DepartureDate = departureDate
+            };
+
+            _flightValidator.ValidateAndThrow(searchFlightModel);
+
+            var flightDetails = _flightRepository.FetchFlightDetails(startLocation, endLocation, departureDate);
+
+            if (flightDetails.Count == 0)
+            {
+                throw new ValidationException(ValidationMessages.NoFlightsAvailable);
             }
 
-            if (!ValidateDestination(endLocation))
-            {
-                throw new ValidationException(ValidationMessages.InvalidDestination);
-            }
-
-            if (!ValidateDepartureDate(departureDate))
-            {
-                throw new ValidationException(ValidationMessages.InvalidDepartureDate);
-            }
-
-            if (ValidateStartAndEndLocation(startLocation, endLocation))
-            {
-                var flightDetails = _flightRepository.FetchFlightDetails(startLocation, endLocation, departureDate);
-
-                if (flightDetails.Count == 0)
-                {
-                    throw new ValidationException(ValidationMessages.NoFlightsAvailable);
-                }
-
-                return flightDetails;
-            }
-
-            return null;
-        }
-
-        private bool ValidateStartAndEndLocation(string startLocation, string endLocation)
-        {
-            if (startLocation.Equals(endLocation))
-            {
-                throw new ValidationException(ValidationMessages.StartandEndLocationCannotBeSame);
-            }
-
-            return true;
-        }
-
-        private bool ValidateDepartureDate(DateTime departureDate)
-        {
-            if (DateTime.UtcNow.Date > departureDate.Date)
-            {
-                throw new ValidationException(ValidationMessages.InvalidDepartureDate);
-            }
-
-            return true;
-        }
-
-        private bool ValidateDestination(string endLocation)
-        {
-            if (string.IsNullOrEmpty(endLocation))
-            {
-                throw new ValidationException(ValidationMessages.DestinationCannotBeEmpty);
-            }
-
-            if (!_airportService.IsAirportValid(endLocation))
-            {
-                throw new ValidationException(ValidationMessages.InvalidDestination);
-            }
-
-            return true;
-        }
-
-        private bool ValidateStartLocation(string startLocation)
-        {
-            if (string.IsNullOrEmpty(startLocation))
-            {
-                throw new ValidationException(ValidationMessages.StartLocationCannotBeEmpty);
-            }
-
-            if (!_airportService.IsAirportValid(startLocation))
-            {
-                throw new ValidationException(ValidationMessages.InvalidStartLocation);
-            }
-
-            return true;
+            return flightDetails;
         }
     }
 }

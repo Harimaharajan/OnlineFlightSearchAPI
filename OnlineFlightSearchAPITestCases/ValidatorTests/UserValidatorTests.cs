@@ -24,7 +24,7 @@ namespace OnlineFlightSearchAPI.UnitTests.ValidatorTests
             var actual = userValidator.Validate(user);
             var expected = new ValidationException(ValidationMessages.UserNameCannotBeEmpty);
 
-            Assert.Equal(expected.Message, actual.Errors.First().ToString());
+            Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]
@@ -41,7 +41,7 @@ namespace OnlineFlightSearchAPI.UnitTests.ValidatorTests
             var actual = userValidator.Validate(user);
             var expected = new ValidationException(ValidationMessages.PasswordCannotBeEmpty);
 
-            Assert.Equal(expected.Message, actual.Errors.First().ToString());
+            Assert.Equal(expected.Message, actual.Errors.FirstOrDefault().ToString());
         }
     }
 }
