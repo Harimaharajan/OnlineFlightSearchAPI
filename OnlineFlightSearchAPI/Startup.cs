@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Repositories;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace OnlineFlightSearchAPI
 {
@@ -26,6 +27,11 @@ namespace OnlineFlightSearchAPI
             services.AddTransient<IAirportServices, AirportServices>();
             services.AddTransient<IFlightRepository, FlightRepository>();
             services.AddTransient<IAirportRepository, AirportRepository>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Online Flight Search API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +45,13 @@ namespace OnlineFlightSearchAPI
             {
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Flight Search API V1");
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
