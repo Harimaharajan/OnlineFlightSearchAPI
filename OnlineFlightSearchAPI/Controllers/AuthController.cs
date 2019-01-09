@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
 using OnlineFlightSearchAPI.Services.AuthenticationServices;
 
@@ -35,7 +36,7 @@ namespace OnlineFlightSearchAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(ValidationMessages.InvalidUserCredentials);
                 }
             }
             catch (ValidationException validationException)

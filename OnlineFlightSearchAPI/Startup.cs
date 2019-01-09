@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +14,7 @@ using OnlineFlightSearchAPI.Repositories;
 using OnlineFlightSearchAPI.Repositories.FlightRepository;
 using OnlineFlightSearchAPI.Services.AuthenticationServices;
 using OnlineFlightSearchAPI.Validator;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace OnlineFlightSearchAPI
 {
@@ -37,6 +40,15 @@ namespace OnlineFlightSearchAPI
             services.AddTransient<UserValidator, UserValidator>();
             services.AddTransient<FlightValidator, FlightValidator>();
             services.AddDbContext<IFlightDBContext, FlightDBContext>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Online Flight Search API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "Header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                { "Bearer", Enumerable.Empty<string>() },
+            });
+            });
 
             string secretKey = Configuration.GetSection("JWTParameter:SecretKey").Value;
 
@@ -66,6 +78,13 @@ namespace OnlineFlightSearchAPI
             {
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Flight Search API");
+            });
 
             app.UseHttpsRedirection();
             app.UseAuthentication();

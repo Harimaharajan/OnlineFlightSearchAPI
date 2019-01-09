@@ -1,14 +1,11 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineFlightSearchAPI.Validator
 {
-    public class FlightValidator: AbstractValidator<SearchFlightModel>
+    public class FlightValidator : AbstractValidator<SearchFlightModel>
     {
         private readonly IAirportServices _airportServices;
 
@@ -27,7 +24,7 @@ namespace OnlineFlightSearchAPI.Validator
                 .NotEqual(flight => flight.StartLocation).WithMessage(ValidationMessages.StartandEndLocationCannotBeSame);
             RuleFor(flight => flight.DepartureDate)
                 .GreaterThan(DateTime.UtcNow.Date).WithMessage(ValidationMessages.InvalidDepartureDate);
-        }
+        }    
 
         private bool BeAValidAirport(string airportCode)
         {

@@ -25,7 +25,7 @@ namespace OnlineFlightSearchAPI.Services.AuthenticationServices
             var user = _userRepository.FetchValidUserDetails(userLoginModel.UserName, userLoginModel.Password);
             if (user == null)
             {
-                throw new ValidationException(ValidationMessages.InvalidUserCredentials);
+                return false;
             }
             else if (user.UserName == userLoginModel.UserName &&
                 user.Password == userLoginModel.Password)
