@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using FluentValidation.TestHelper;
 using Moq;
 using OnlineFlightSearchAPI.FlightServices;
 using OnlineFlightSearchAPI.Models;
@@ -27,9 +28,11 @@ namespace OnlineFlightSearchAPITestCases
             var searchFlightService = new FlightService(Mock.Of<IFlightRepository>(), new FlightValidator(mockAirportService));
 
             var expectedException = new ValidationException(ValidationMessages.StartLocationCannotBeEmpty);
-            var actualException = Assert.Throws<ValidationException>(() => searchFlightService.SearchFlightDetails(startLocation, "BUD", DateTime.UtcNow.AddDays(1)));
+            Assert.Throws<ValidationException>(
+                () => searchFlightService.SearchFlightDetails(startLocation, "BUD", DateTime.UtcNow.AddDays(1))
+                ).Errors.WithErrorMessage(ValidationMessages.StartLocationCannotBeEmpty);
 
-            Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
+            //Assert.Equal(expectedException.Message, actualException.Errors.FirstOrDefault().ToString());
         }
 
         [Theory]

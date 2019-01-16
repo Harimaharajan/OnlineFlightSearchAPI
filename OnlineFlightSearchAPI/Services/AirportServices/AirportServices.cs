@@ -19,7 +19,8 @@ namespace OnlineFlightSearchAPI.FlightServices
                 return false;
             }
 
-            if (_airportRepository.FetchAirportDetail(airportCode).Any())
+            var result = _airportRepository.FetchAirportDetail(airportCode);
+            if (result.Where(s => string.Compare(s.AirportCode, airportCode, true) == 0).Count() > 0)
             {
                 return true;
             }
