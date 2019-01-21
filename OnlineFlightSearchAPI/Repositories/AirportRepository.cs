@@ -10,7 +10,7 @@ namespace OnlineFlightSearchAPI.Repositories
 
         public IEnumerable<AirportDetail> FetchAirportDetail(string airportCode)
         {
-            return _airportDetail.Where(x => x.AirportCode == airportCode);
+            return _airportDetail.Where(x => x.AirportCode == airportCode);  
         }
     }
 }
