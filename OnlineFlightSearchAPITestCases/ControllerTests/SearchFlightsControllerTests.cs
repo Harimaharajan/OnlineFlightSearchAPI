@@ -18,7 +18,7 @@ using Xunit;
 
 namespace OnlineFlightSearchAPITestCases.ControllerTests
 {
-    public class SearchFlightsControllerTests : IClassFixture<WebApplicationFactory<OnlineFlightSearchAPI.Startup>>
+    public class SearchFlightsControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly TestServer server;
 
@@ -26,6 +26,18 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         {
             server = new TestServer(new WebHostBuilder()
                 .UseStartup<Startup>());
+        }
+
+        [Theory]
+        [InlineData("BUD", "LTN")]
+        public async Task tAsync(string startLocation, string destination)
+        {
+            var client = server.CreateClient();
+            var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={DateTime.UtcNow.Date.AddDays(1)}";
+
+            var response = await client.GetAsync(url);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Theory]
