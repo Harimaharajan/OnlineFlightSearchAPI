@@ -33,11 +33,25 @@ namespace OnlineFlightSearchAPITestCases.ControllerTests
         public async Task tAsync(string startLocation, string destination)
         {
             var client = server.CreateClient();
-            var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={DateTime.UtcNow.Date.AddDays(1)}";
+            var request = String.Format(TestConstants.ValidFlightSearchRequest, startLocation, destination, DateTime.UtcNow.Date.AddDays(1));
 
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync(request);
+
+            //var mockSearchFlightService = new Mock<ISearchFlightService>();
+            //mockSearchFlightService.Setup(x => x.SearchFlightDetails(startLocation, destination, DateTime.UtcNow.Date.AddDays(1))).Returns(ExpectedFlightDetails());
+
+            //var searchFlightsController = new SearchFlightsController(mockSearchFlightService.Object);
+            //var actualResult = searchFlightsController.SearchFlightDetails(startLocation, destination, DateTime.UtcNow.Date.AddDays(1).ToString()) as OkObjectResult;
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+
+            //var client = server.CreateClient();
+            //var url = $"/api/SearchFlights/SearchFlightDetails?startLocation={startLocation}&endDestination={destination}&departureDate={DateTime.UtcNow.Date.AddDays(1)}";
+
+            //var response = await client.GetAsync(url);
+
+            //Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Theory]

@@ -16,7 +16,7 @@ namespace OnlineFlightSearchAPI.Models
 
         public decimal Length { get; set; }
 
-        public int TicketFare { get; set; }
+        public decimal TicketFare { get; set; }
 
         public int AvailabilityCount { get; set; }
 
